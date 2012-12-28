@@ -7,7 +7,7 @@ public class B4DispatcherServletInitializer extends
 
 	@Override
 	protected Class<?>[] getRootConfigClasses() {
-		return null;
+		return new Class[] { B4RootConfig.class };
 	}
 
 	@Override
