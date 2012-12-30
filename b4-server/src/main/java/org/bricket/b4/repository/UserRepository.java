@@ -14,25 +14,10 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.bricket.b4.domain;
+package org.bricket.b4.repository;
 
-import java.io.Serializable;
+import org.bricket.b4.domain.User;
+import org.springframework.data.repository.PagingAndSortingRepository;
 
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.MappedSuperclass;
-
-import lombok.Data;
-
-/**
- * @author Henning Teek
- */
-
-@MappedSuperclass
-@Data
-public abstract class DomainObject implements Serializable {
-	@Id
-	@GeneratedValue(strategy = GenerationType.AUTO)
-	private Long id;
+public interface UserRepository extends PagingAndSortingRepository<User, Long> {
 }

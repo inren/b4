@@ -14,25 +14,20 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.bricket.b4.domain;
+package org.bricket.b4.web;
 
-import java.io.Serializable;
+import org.bricket.b4.domain.User;
+import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.ResponseBody;
 
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.MappedSuperclass;
-
-import lombok.Data;
-
-/**
- * @author Henning Teek
- */
-
-@MappedSuperclass
-@Data
-public abstract class DomainObject implements Serializable {
-	@Id
-	@GeneratedValue(strategy = GenerationType.AUTO)
-	private Long id;
+@Controller
+@RequestMapping("/users")
+public class UserController {
+	@RequestMapping("/{id}")
+	public @ResponseBody
+	User getUser(@PathVariable("id") User user) {
+		return user;
+	}
 }

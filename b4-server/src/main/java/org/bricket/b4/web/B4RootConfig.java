@@ -16,11 +16,30 @@
  */
 package org.bricket.b4.web;
 
+import org.springframework.context.annotation.AdviceMode;
+import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.EnableLoadTimeWeaving;
+import org.springframework.context.annotation.EnableLoadTimeWeaving.AspectJWeaving;
 import org.springframework.context.annotation.ImportResource;
+import org.springframework.dao.annotation.PersistenceExceptionTranslationPostProcessor;
+import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
+import org.springframework.orm.jpa.support.PersistenceAnnotationBeanPostProcessor;
+import org.springframework.transaction.annotation.EnableTransactionManagement;
 
 @Configuration
+@EnableLoadTimeWeaving(aspectjWeaving = AspectJWeaving.ENABLED)
+@EnableTransactionManagement(mode = AdviceMode.ASPECTJ)
 @ImportResource("classpath:/META-INF/spring/application-context.xml")
+@EnableJpaRepositories("org.bricket.b4.repository")
 public class B4RootConfig {
+	@Bean
+	public PersistenceExceptionTranslationPostProcessor persistenceExceptionTranslationPostProcessor() {
+		return new PersistenceExceptionTranslationPostProcessor();
+	}
 
+	@Bean
+	public PersistenceAnnotationBeanPostProcessor persistenceAnnotationBeanPostProcessor() {
+		return new PersistenceAnnotationBeanPostProcessor();
+	}
 }
