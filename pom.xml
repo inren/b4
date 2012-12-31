@@ -59,8 +59,6 @@
 		<slf4j.version>1.7.2</slf4j.version>
 		<logback.version>1.0.9</logback.version>
 		<groovy.version>2.0.6</groovy.version>
-		<lombok.version>0.11.6</lombok.version>
-		<lombok-plugin.version>0.11.6.0</lombok-plugin.version>
 		<bonecp.version>0.7.1.RELEASE</bonecp.version>
 		<h2.version>1.3.170</h2.version>
 		<hibernate.version>4.1.9.Final</hibernate.version>
@@ -109,13 +107,6 @@
 				<artifactId>groovy</artifactId>
 				<version>${groovy.version}</version>
 				<scope>runtime</scope>
-			</dependency>
-
-			<!-- lombok -->
-			<dependency>
-				<groupId>org.projectlombok</groupId>
-				<artifactId>lombok</artifactId>
-				<version>${lombok.version}</version>
 			</dependency>
 
 			<!-- bonecp -->
@@ -263,7 +254,6 @@
 					<configuration>
 						<!-- source output directory -->
 						<outputDirectory>target/generated-sources/apt</outputDirectory>
-						<sourceDirectory>src/main/lombok</sourceDirectory>
 					</configuration>
 					<executions>
 						<execution>
@@ -289,22 +279,8 @@
 							<configuration>
 								<sources>
 									<source>target/generated-sources/apt</source>
-									<source>target/generated-sources/delombok</source>
 								</sources>
 							</configuration>
-						</execution>
-					</executions>
-				</plugin>
-				<plugin>
-					<groupId>org.projectlombok</groupId>
-					<artifactId>lombok-maven-plugin</artifactId>
-					<version>${lombok-plugin.version}</version>
-					<executions>
-						<execution>
-							<phase>generate-sources</phase>
-							<goals>
-								<goal>delombok</goal>
-							</goals>
 						</execution>
 					</executions>
 				</plugin>
@@ -379,7 +355,7 @@
 										</goals>
 									</pluginExecutionFilter>
 									<action>
-										<execute />
+										<ignore />
 									</action>
 								</pluginExecution>
 								<pluginExecution>
@@ -395,19 +371,6 @@
 										<execute />
 									</action>
 								</pluginExecution>
-								<pluginExecution>
-									<pluginExecutionFilter>
-										<groupId>org.projectlombok</groupId>
-										<artifactId>lombok-maven-plugin</artifactId>
-										<versionRange>[0.11.6.0,)</versionRange>
-										<goals>
-											<goal>delombok</goal>
-										</goals>
-									</pluginExecutionFilter>
-									<action>
-										<ignore />
-									</action>
-								</pluginExecution>
 							</pluginExecutions>
 						</lifecycleMappingMetadata>
 					</configuration>
@@ -415,31 +378,4 @@
 			</plugins>
 		</pluginManagement>
 	</build>
-	<profiles>
-		<profile>
-			<id>lombok-needs-tools-jar</id>
-			<activation>
-				<file>
-					<exists>${java.home}/../lib/tools.jar</exists>
-				</file>
-			</activation>
-			<build>
-				<plugins>
-					<plugin>
-						<groupId>org.projectlombok</groupId>
-						<artifactId>lombok-maven-plugin</artifactId>
-						<dependencies>
-							<dependency>
-								<groupId>sun.jdk</groupId>
-								<artifactId>tools</artifactId>
-								<version>1.7</version>
-								<scope>system</scope>
-								<systemPath>${java.home}/../lib/tools.jar</systemPath>
-							</dependency>
-						</dependencies>
-					</plugin>
-				</plugins>
-			</build>
-		</profile>
-	</profiles>
 </project>
