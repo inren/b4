@@ -21,6 +21,9 @@ import javax.persistence.Entity;
 import javax.persistence.Table;
 import javax.persistence.UniqueConstraint;
 
+import lombok.Data;
+import lombok.EqualsAndHashCode;
+
 import org.hibernate.annotations.Cache;
 import org.hibernate.annotations.CacheConcurrencyStrategy;
 
@@ -30,69 +33,10 @@ import org.hibernate.annotations.CacheConcurrencyStrategy;
 @Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
 @Entity
 @Table(name = "Domain_User", uniqueConstraints = @UniqueConstraint(columnNames = "email"))
+@Data
+@EqualsAndHashCode(callSuper = true)
 public class User extends DomainObject {
     @Column(nullable = false)
     private String email;
     private String password;
-
-    public final String getEmail() {
-	return email;
-    }
-
-    public final void setEmail(String email) {
-	this.email = email;
-    }
-
-    public final String getPassword() {
-	return password;
-    }
-
-    public final void setPassword(String password) {
-	this.password = password;
-    }
-
-    @Override
-    public int hashCode() {
-	final int prime = 31;
-	int result = super.hashCode();
-	result = prime * result + ((email == null) ? 0 : email.hashCode());
-	result = prime * result
-		+ ((password == null) ? 0 : password.hashCode());
-	return result;
-    }
-
-    @Override
-    public boolean equals(Object obj) {
-	if (this == obj) {
-	    return true;
-	}
-	if (!super.equals(obj)) {
-	    return false;
-	}
-	if (!(obj instanceof User)) {
-	    return false;
-	}
-	User other = (User) obj;
-	if (email == null) {
-	    if (other.email != null) {
-		return false;
-	    }
-	} else if (!email.equals(other.email)) {
-	    return false;
-	}
-	if (password == null) {
-	    if (other.password != null) {
-		return false;
-	    }
-	} else if (!password.equals(other.password)) {
-	    return false;
-	}
-	return true;
-    }
-
-    @Override
-    public String toString() {
-	return String.format("User [email=%s, password=%s, getId()=%s]", email,
-		password, getId());
-    }
 }

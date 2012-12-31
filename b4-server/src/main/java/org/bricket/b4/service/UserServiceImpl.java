@@ -1,3 +1,19 @@
+/**
+ * Copyright 2011 the original author or authors.
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *      http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or
+ * implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
 package org.bricket.b4.service;
 
 import java.util.ArrayList;
@@ -5,21 +21,19 @@ import java.util.List;
 
 import javax.annotation.Resource;
 
+import lombok.extern.slf4j.Slf4j;
+
 import org.bricket.b4.domain.User;
 import org.bricket.b4.repository.UserRepository;
 import org.bricket.b4.service.common.B4ServiceException;
 import org.bricket.b4.service.common.B4ServiceImpl;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 @Service
 @Transactional(readOnly = true)
+@Slf4j
 public class UserServiceImpl extends B4ServiceImpl implements UserService {
-    private static final Logger log = LoggerFactory
-	    .getLogger(UserServiceImpl.class);
-
     @Resource
     UserRepository userRepository;
 
