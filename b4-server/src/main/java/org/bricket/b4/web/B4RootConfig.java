@@ -32,6 +32,7 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.EnableLoadTimeWeaving;
 import org.springframework.context.annotation.EnableLoadTimeWeaving.AspectJWeaving;
 import org.springframework.context.annotation.Import;
+import org.springframework.context.annotation.ImportResource;
 import org.springframework.dao.annotation.PersistenceExceptionTranslationPostProcessor;
 import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 import org.springframework.jdbc.datasource.LazyConnectionDataSourceProxy;
@@ -54,6 +55,7 @@ import com.jolbox.bonecp.BoneCPDataSource;
 @EnableTransactionManagement(mode = AdviceMode.ASPECTJ)
 @EnableJpaRepositories("org.bricket.b4.repository")
 @ComponentScan(basePackages = { "org.bricket.b4.service" })
+@ImportResource(value = { "classpath:/META-INF/spring/security-context.xml" })
 public class B4RootConfig {
     @Value("${jdbc.driverClass}")
     private String jdbcDriverClass;

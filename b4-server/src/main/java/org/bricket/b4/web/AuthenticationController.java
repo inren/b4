@@ -20,14 +20,13 @@ import org.bricket.b4.domain.User;
 import org.bricket.b4.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 @Controller
-@RequestMapping("/api/users")
-public class UserController {
+@RequestMapping("/authenticate")
+public class AuthenticationController {
     @Autowired
     private UserRepository userRepository;
 
@@ -35,14 +34,5 @@ public class UserController {
     @ResponseBody
     public Iterable<User> getUsers() {
 	return userRepository.findAll();
-    }
-
-    @RequestMapping(value = "/{userId}", method = RequestMethod.GET)
-    @ResponseBody
-    public User getUser(@PathVariable("userId") User user) {
-	if (user == null) {
-	    throw new ResourceNotFoundException();
-	}
-	return user;
     }
 }
