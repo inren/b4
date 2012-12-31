@@ -14,25 +14,27 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.bricket.b4.web;
+package org.bricket.b4.service.common;
 
-import org.springframework.web.servlet.support.AbstractAnnotationConfigDispatcherServletInitializer;
+public class B4ServiceException extends Exception {
+    private static final String SERVICE_ERROR = "service.error.";
 
-public class B4DispatcherServletInitializer extends
-	AbstractAnnotationConfigDispatcherServletInitializer {
+    private String key;
 
-    @Override
-    protected Class<?>[] getRootConfigClasses() {
-	return new Class[] { B4RootConfig.class };
+    /**
+     * @param key
+     */
+    public B4ServiceException(String key) {
+	super();
+	this.key = key;
     }
 
-    @Override
-    protected Class<?>[] getServletConfigClasses() {
-	return new Class[] { B4WebConfig.class };
+    public B4ServiceException(String key, Throwable cause) {
+	super(cause);
+	this.key = key;
     }
 
-    @Override
-    protected String[] getServletMappings() {
-	return new String[] { "/api/*" };
+    public String getKey() {
+	return SERVICE_ERROR + key;
     }
 }

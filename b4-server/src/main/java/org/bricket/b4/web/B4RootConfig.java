@@ -16,30 +16,139 @@
  */
 package org.bricket.b4.web;
 
+import java.util.HashMap;
+import java.util.Map;
+
+import javax.persistence.EntityManagerFactory;
+import javax.sql.DataSource;
+
+import org.hibernate.cache.ehcache.EhCacheRegionFactory;
+import org.hibernate.dialect.H2Dialect;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.AdviceMode;
 import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.EnableLoadTimeWeaving;
 import org.springframework.context.annotation.EnableLoadTimeWeaving.AspectJWeaving;
-import org.springframework.context.annotation.ImportResource;
+import org.springframework.context.annotation.Import;
 import org.springframework.dao.annotation.PersistenceExceptionTranslationPostProcessor;
 import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
+import org.springframework.jdbc.datasource.LazyConnectionDataSourceProxy;
+import org.springframework.orm.jpa.JpaDialect;
+import org.springframework.orm.jpa.JpaTransactionManager;
+import org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean;
 import org.springframework.orm.jpa.support.PersistenceAnnotationBeanPostProcessor;
+import org.springframework.orm.jpa.support.SharedEntityManagerBean;
+import org.springframework.orm.jpa.vendor.Database;
+import org.springframework.orm.jpa.vendor.HibernateJpaDialect;
+import org.springframework.orm.jpa.vendor.HibernateJpaVendorAdapter;
+import org.springframework.transaction.PlatformTransactionManager;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
 
+import com.jolbox.bonecp.BoneCPDataSource;
+
 @Configuration
+@Import(PropertyPlaceholderConfig.class)
 @EnableLoadTimeWeaving(aspectjWeaving = AspectJWeaving.ENABLED)
 @EnableTransactionManagement(mode = AdviceMode.ASPECTJ)
-@ImportResource("classpath:/META-INF/spring/application-context.xml")
 @EnableJpaRepositories("org.bricket.b4.repository")
+@ComponentScan(basePackages = { "org.bricket.b4.service" })
 public class B4RootConfig {
-	@Bean
-	public PersistenceExceptionTranslationPostProcessor persistenceExceptionTranslationPostProcessor() {
-		return new PersistenceExceptionTranslationPostProcessor();
-	}
+    @Value("${jdbc.driverClass}")
+    private String jdbcDriverClass;
+    @Value("${jdbc.url}")
+    private String jdbcUrl;
+    @Value("${jdbc.username}")
+    private String jdbcUsername;
+    @Value("${jdbc.password}")
+    private String jdbcPassword;
 
-	@Bean
-	public PersistenceAnnotationBeanPostProcessor persistenceAnnotationBeanPostProcessor() {
-		return new PersistenceAnnotationBeanPostProcessor();
-	}
+    @Value("${jpa.databasePlatform}")
+    private String jpaDatabasePlatform;
+    @Value("${jpa.showSql}")
+    private boolean jpaShowSql;
+    @Value("${jpa.generateDdl}")
+    private boolean jpaGenerateDdl;
+
+    @Bean
+    public static PersistenceExceptionTranslationPostProcessor persistenceExceptionTranslationPostProcessor() {
+	return new PersistenceExceptionTranslationPostProcessor();
+    }
+
+    @Bean
+    public static PersistenceAnnotationBeanPostProcessor persistenceAnnotationBeanPostProcessor() {
+	return new PersistenceAnnotationBeanPostProcessor();
+    }
+
+    @Bean
+    public DataSource dataSource() {
+	return new LazyConnectionDataSourceProxy(mainDataSource());
+    }
+
+    @Bean
+    public DataSource mainDataSource() {
+	BoneCPDataSource ds = new BoneCPDataSource();
+	ds.setDriverClass(jdbcDriverClass);
+	ds.setJdbcUrl(jdbcUrl);
+	ds.setUsername(jdbcUsername);
+	ds.setPassword(jdbcPassword);
+
+	ds.setIdleConnectionTestPeriodInMinutes(60);
+	ds.setIdleMaxAgeInMinutes(240);
+	ds.setMaxConnectionsPerPartition(60);
+	ds.setMinConnectionsPerPartition(20);
+	ds.setPartitionCount(3);
+	ds.setAcquireIncrement(10);
+	ds.setStatementsCacheSize(50);
+	ds.setReleaseHelperThreads(3);
+
+	return ds;
+    }
+
+    @Bean
+    public JpaDialect jpaDialect() {
+	return new HibernateJpaDialect();
+    }
+
+    @Bean
+    public EntityManagerFactory entityManagerFactory() {
+	HibernateJpaVendorAdapter vendorAdapter = new HibernateJpaVendorAdapter();
+	vendorAdapter.setDatabase(Database.H2);
+	vendorAdapter.setGenerateDdl(jpaGenerateDdl);
+	vendorAdapter.setShowSql(jpaShowSql);
+
+	LocalContainerEntityManagerFactoryBean factory = new LocalContainerEntityManagerFactoryBean();
+	factory.setJpaVendorAdapter(vendorAdapter);
+	factory.setPackagesToScan("org.bricket.b4.domain");
+	factory.setDataSource(dataSource());
+	factory.setJpaDialect(jpaDialect());
+
+	Map<String, String> jpaProperties = new HashMap<String, String>();
+	jpaProperties.put("hibernate.dialect", H2Dialect.class.getName());
+	jpaProperties.put("hibernate.cache.region.factory_class",
+		EhCacheRegionFactory.class.getName());
+	jpaProperties.put("hibernate.cache.use_second_level_cache", "true");
+	jpaProperties.put("hibernate.cache.use_query_cache", "true");
+	jpaProperties.put("hibernate.cache.use_minimal_puts", "true");
+	factory.setJpaPropertyMap(jpaProperties);
+
+	factory.afterPropertiesSet();
+
+	return factory.getObject();
+    }
+
+    @Bean
+    public SharedEntityManagerBean entityManager() {
+	SharedEntityManagerBean em = new SharedEntityManagerBean();
+	em.setEntityManagerFactory(entityManagerFactory());
+	return em;
+    }
+
+    @Bean
+    public PlatformTransactionManager transactionManager() {
+	JpaTransactionManager txManager = new JpaTransactionManager();
+	txManager.setEntityManagerFactory(entityManagerFactory());
+	return txManager;
+    }
 }

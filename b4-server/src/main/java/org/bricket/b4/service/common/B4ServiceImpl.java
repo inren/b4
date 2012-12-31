@@ -14,25 +14,22 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.bricket.b4.web;
+package org.bricket.b4.service.common;
 
-import org.springframework.web.servlet.support.AbstractAnnotationConfigDispatcherServletInitializer;
+import javax.annotation.PostConstruct;
 
-public class B4DispatcherServletInitializer extends
-	AbstractAnnotationConfigDispatcherServletInitializer {
-
-    @Override
-    protected Class<?>[] getRootConfigClasses() {
-	return new Class[] { B4RootConfig.class };
-    }
+public abstract class B4ServiceImpl implements B4Service {
+    private boolean initialized = false;
 
     @Override
-    protected Class<?>[] getServletConfigClasses() {
-	return new Class[] { B4WebConfig.class };
+    @PostConstruct
+    public final synchronized void init() throws B4ServiceException {
+	if (initialized) {
+	    return;
+	}
+	onInit();
+	initialized = true;
     }
 
-    @Override
-    protected String[] getServletMappings() {
-	return new String[] { "/api/*" };
-    }
+    protected abstract void onInit() throws B4ServiceException;
 }

@@ -18,6 +18,7 @@ package org.bricket.b4.web;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.data.repository.support.DomainClassConverter;
 import org.springframework.format.support.FormattingConversionService;
@@ -26,13 +27,14 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurerAdapter
 
 @Configuration
 @EnableWebMvc
+@ComponentScan(basePackageClasses = { B4WebConfig.class })
 public class B4WebConfig extends WebMvcConfigurerAdapter {
-	@Autowired
-	FormattingConversionService conversionService;
+    @Autowired
+    FormattingConversionService conversionService;
 
-	@Bean
-	public DomainClassConverter<?> domainClassConverter() {
-		return new DomainClassConverter<FormattingConversionService>(
-				conversionService);
-	}
+    @Bean
+    public DomainClassConverter<?> domainClassConverter() {
+	return new DomainClassConverter<FormattingConversionService>(
+		conversionService);
+    }
 }

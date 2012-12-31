@@ -36,7 +36,7 @@ import org.hibernate.annotations.CacheConcurrencyStrategy;
 @Data
 @EqualsAndHashCode(callSuper = true)
 public class User extends DomainObject {
-	@Column(nullable = false)
-	private String email;
-	private String password;
+    @Column(nullable = false)
+    private String email;
+    private String password;
 }

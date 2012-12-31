@@ -14,25 +14,33 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.bricket.b4.web;
+package org.bricket.b4.service;
 
-import org.springframework.web.servlet.support.AbstractAnnotationConfigDispatcherServletInitializer;
+import org.bricket.b4.service.common.B4Service;
 
-public class B4DispatcherServletInitializer extends
-	AbstractAnnotationConfigDispatcherServletInitializer {
+public interface UserService extends B4Service {
+    /**
+     * Enumeration of all default users
+     * 
+     * @author Henning Teek
+     */
+    public enum Users {
+	USER("user@localhost", "user"), ADMIN("admin@localhost", "admin");
 
-    @Override
-    protected Class<?>[] getRootConfigClasses() {
-	return new Class[] { B4RootConfig.class };
-    }
+	private final String email;
+	private final String password;
 
-    @Override
-    protected Class<?>[] getServletConfigClasses() {
-	return new Class[] { B4WebConfig.class };
-    }
+	Users(String email, String password) {
+	    this.email = email;
+	    this.password = password;
+	}
 
-    @Override
-    protected String[] getServletMappings() {
-	return new String[] { "/api/*" };
+	public String getEmail() {
+	    return email;
+	}
+
+	public String getPassword() {
+	    return password;
+	}
     }
 }

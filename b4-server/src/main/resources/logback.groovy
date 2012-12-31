@@ -10,6 +10,6 @@ appender("RootConsoleAppender", ConsoleAppender) {
 	encoder(PatternLayoutEncoder) { pattern = "%d{yyyy-MM-dd HH:mm:ss.SSS} [%thread] %-5level %logger{36} - %msg%n" }
 }
 
-logger("org.bricket.b4", INFO)
+logger("org.bricket.b4", DEBUG)
 
 root(ERROR, ["RootConsoleAppender"])
