@@ -17,7 +17,9 @@
 package org.bricket.b4.web;
 
 import org.bricket.b4.domain.User;
+import org.bricket.b4.domain.UserDTO;
 import org.bricket.b4.repository.UserRepository;
+import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -31,6 +33,9 @@ public class UserController {
     @Autowired
     private UserRepository userRepository;
 
+    @Autowired
+    private ModelMapper modelMapper;
+
     @RequestMapping(method = RequestMethod.GET)
     @ResponseBody
     public Iterable<User> getUsers() {
@@ -39,10 +44,10 @@ public class UserController {
 
     @RequestMapping(value = "/{userId}", method = RequestMethod.GET)
     @ResponseBody
-    public User getUser(@PathVariable("userId") User user) {
+    public UserDTO getUser(@PathVariable("userId") User user) {
 	if (user == null) {
 	    throw new ResourceNotFoundException();
 	}
-	return user;
+	return modelMapper.map(user, UserDTO.class);
     }
 }

@@ -24,6 +24,7 @@ import javax.sql.DataSource;
 
 import org.hibernate.cache.ehcache.EhCacheRegionFactory;
 import org.hibernate.dialect.H2Dialect;
+import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.AdviceMode;
 import org.springframework.context.annotation.Bean;
@@ -81,6 +82,11 @@ public class B4RootConfig {
     @Bean
     public static PersistenceAnnotationBeanPostProcessor persistenceAnnotationBeanPostProcessor() {
 	return new PersistenceAnnotationBeanPostProcessor();
+    }
+
+    @Bean
+    public ModelMapper modelMapper() {
+	return new ModelMapper();
     }
 
     @Bean

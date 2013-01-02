@@ -123,6 +123,12 @@
 			<artifactId>spring-security-web</artifactId>
 		</dependency>
 
+		<!-- modelmapper -->
+		<dependency>
+			<groupId>org.modelmapper</groupId>
+			<artifactId>modelmapper</artifactId>
+		</dependency>
+
 		<!-- servlet api -->
 		<dependency>
 			<groupId>javax.servlet</groupId>
