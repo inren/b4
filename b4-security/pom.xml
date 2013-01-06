@@ -10,17 +10,17 @@
 		<version>0.0.1-SNAPSHOT</version>
 	</parent>
 
-	<artifactId>b4-server</artifactId>
-	<packaging>war</packaging>
+	<artifactId>b4-security</artifactId>
+	<packaging>jar</packaging>
 
-	<name>b4-server</name>
+	<name>b4-security</name>
 	<url>http://www.bricket.org</url>
 
 	<dependencies>
 		<!-- b4 -->
 		<dependency>
 			<groupId>org.bricket.b4</groupId>
-			<artifactId>b4-security</artifactId>
+			<artifactId>b4-core</artifactId>
 		</dependency>
 
 		<!-- lombok -->
@@ -49,14 +49,6 @@
 			<plugin>
 				<groupId>org.codehaus.mojo</groupId>
 				<artifactId>build-helper-maven-plugin</artifactId>
-			</plugin>
-			<plugin>
-				<groupId>org.apache.maven.plugins</groupId>
-				<artifactId>maven-war-plugin</artifactId>
-			</plugin>
-			<plugin>
-				<groupId>org.apache.tomcat.maven</groupId>
-				<artifactId>tomcat7-maven-plugin</artifactId>
 			</plugin>
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
