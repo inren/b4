@@ -19,17 +19,17 @@ package org.bricket.b4.core.service;
 import javax.annotation.PostConstruct;
 
 public abstract class B4ServiceImpl implements B4Service {
-    private boolean initialized = false;
+	private boolean initialized = false;
 
-    @Override
-    @PostConstruct
-    public final synchronized void init() throws B4ServiceException {
-	if (initialized) {
-	    return;
+	@Override
+	@PostConstruct
+	public final synchronized void init() throws B4ServiceException {
+		if (initialized) {
+			return;
+		}
+		onInit();
+		initialized = true;
 	}
-	onInit();
-	initialized = true;
-    }
 
-    protected abstract void onInit() throws B4ServiceException;
+	protected abstract void onInit() throws B4ServiceException;
 }

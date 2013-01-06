@@ -34,23 +34,23 @@ import org.springframework.transaction.annotation.Transactional;
 @Transactional(readOnly = true)
 @Slf4j
 public class UserServiceImpl extends B4ServiceImpl implements UserService {
-    @Resource
-    UserRepository userRepository;
+	@Resource
+	UserRepository userRepository;
 
-    @Override
-    @Transactional
-    protected void onInit() throws B4ServiceException {
-	if (userRepository.count() == 0) {
-	    List<User> users = new ArrayList<User>();
-	    for (Users u : Users.values()) {
-		User user = new User();
-		user.setEmail(u.getEmail());
-		user.setPassword(u.getPassword());
-		users.add(user);
-	    }
-	    Iterable<User> result = userRepository.save(users);
-	    log.info("created auto generated users: " + result);
+	@Override
+	@Transactional
+	protected void onInit() throws B4ServiceException {
+		if (userRepository.count() == 0) {
+			List<User> users = new ArrayList<User>();
+			for (Users u : Users.values()) {
+				User user = new User();
+				user.setEmail(u.getEmail());
+				user.setPassword(u.getPassword());
+				users.add(user);
+			}
+			Iterable<User> result = userRepository.save(users);
+			log.info("created auto generated users: " + result);
+		}
+		log.info("user service initialized");
 	}
-	log.info("user service initialized");
-    }
 }

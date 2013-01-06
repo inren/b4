@@ -18,7 +18,9 @@ package org.bricket.b4.security.controller;
 
 import org.bricket.b4.core.controller.ResourceNotFoundException;
 import org.bricket.b4.security.entity.User;
+import org.bricket.b4.security.entity.UserDTO;
 import org.bricket.b4.security.repository.UserRepository;
+import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -32,6 +34,9 @@ public class UserController {
 	@Autowired
 	private UserRepository userRepository;
 
+	@Autowired
+	private ModelMapper modelMapper;
+
 	@RequestMapping(method = RequestMethod.GET)
 	@ResponseBody
 	public Iterable<User> getUsers() {
@@ -40,10 +45,10 @@ public class UserController {
 
 	@RequestMapping(value = "/{userId}", method = RequestMethod.GET)
 	@ResponseBody
-	public User getUser(@PathVariable("userId") User user) {
+	public UserDTO getUser(@PathVariable("userId") User user) {
 		if (user == null) {
 			throw new ResourceNotFoundException();
 		}
-		return user;
+		return modelMapper.map(user, UserDTO.class);
 	}
 }

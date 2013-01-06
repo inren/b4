@@ -123,10 +123,10 @@
 			<artifactId>spring-security-web</artifactId>
 		</dependency>
 
-		<!-- spring security oauth -->
+		<!-- modelmapper -->
 		<dependency>
-			<groupId>org.springframework.security.oauth</groupId>
-			<artifactId>spring-security-oauth2</artifactId>
+			<groupId>org.modelmapper</groupId>
+			<artifactId>modelmapper</artifactId>
 		</dependency>
 
 		<!-- servlet api -->

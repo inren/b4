@@ -32,7 +32,7 @@ import lombok.Data;
 @MappedSuperclass
 @Data
 public abstract class DomainObject implements Serializable {
-    @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
-    private Long id;
+	@Id
+	@GeneratedValue(strategy = GenerationType.AUTO)
+	private Long id;
 }

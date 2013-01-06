@@ -23,11 +23,12 @@ import org.springframework.core.io.ClassPathResource;
 
 @Configuration
 public class PropertyPlaceholderConfig {
-    @Bean
-    public static PropertySourcesPlaceholderConfigurer propertySourcesPlaceholderConfigurer() {
-	PropertySourcesPlaceholderConfigurer pspc = new PropertySourcesPlaceholderConfigurer();
-	pspc.setLocation(new ClassPathResource("/META-INF/spring/b4-core.properties"));
-	pspc.setIgnoreUnresolvablePlaceholders(true);
-	return pspc;
-    }
+	@Bean
+	public static PropertySourcesPlaceholderConfigurer propertySourcesPlaceholderConfigurer() {
+		PropertySourcesPlaceholderConfigurer pspc = new PropertySourcesPlaceholderConfigurer();
+		pspc.setLocation(new ClassPathResource(
+				"/META-INF/spring/b4-core.properties"));
+		pspc.setIgnoreUnresolvablePlaceholders(true);
+		return pspc;
+	}
 }

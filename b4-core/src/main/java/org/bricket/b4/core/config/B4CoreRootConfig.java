@@ -24,6 +24,7 @@ import javax.sql.DataSource;
 
 import org.hibernate.cache.ehcache.EhCacheRegionFactory;
 import org.hibernate.dialect.H2Dialect;
+import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.AdviceMode;
 import org.springframework.context.annotation.Bean;
@@ -55,100 +56,105 @@ import com.jolbox.bonecp.BoneCPDataSource;
 @EnableJpaRepositories("org.bricket.b4.*.repository")
 @ComponentScan(basePackages = { "org.bricket.b4.*.service" })
 public class B4CoreRootConfig {
-    @Value("${jdbc.driverClass}")
-    private String jdbcDriverClass;
-    @Value("${jdbc.url}")
-    private String jdbcUrl;
-    @Value("${jdbc.username}")
-    private String jdbcUsername;
-    @Value("${jdbc.password}")
-    private String jdbcPassword;
+	@Value("${jdbc.driverClass}")
+	private String jdbcDriverClass;
+	@Value("${jdbc.url}")
+	private String jdbcUrl;
+	@Value("${jdbc.username}")
+	private String jdbcUsername;
+	@Value("${jdbc.password}")
+	private String jdbcPassword;
 
-    @Value("${jpa.databasePlatform}")
-    private String jpaDatabasePlatform;
-    @Value("${jpa.showSql}")
-    private boolean jpaShowSql;
-    @Value("${jpa.generateDdl}")
-    private boolean jpaGenerateDdl;
+	@Value("${jpa.databasePlatform}")
+	private String jpaDatabasePlatform;
+	@Value("${jpa.showSql}")
+	private boolean jpaShowSql;
+	@Value("${jpa.generateDdl}")
+	private boolean jpaGenerateDdl;
 
-    @Bean
-    public static PersistenceExceptionTranslationPostProcessor persistenceExceptionTranslationPostProcessor() {
-	return new PersistenceExceptionTranslationPostProcessor();
-    }
+	@Bean
+	public static PersistenceExceptionTranslationPostProcessor persistenceExceptionTranslationPostProcessor() {
+		return new PersistenceExceptionTranslationPostProcessor();
+	}
 
-    @Bean
-    public static PersistenceAnnotationBeanPostProcessor persistenceAnnotationBeanPostProcessor() {
-	return new PersistenceAnnotationBeanPostProcessor();
-    }
+	@Bean
+	public static PersistenceAnnotationBeanPostProcessor persistenceAnnotationBeanPostProcessor() {
+		return new PersistenceAnnotationBeanPostProcessor();
+	}
 
-    @Bean
-    public DataSource dataSource() {
-	return new LazyConnectionDataSourceProxy(mainDataSource());
-    }
+	@Bean
+	public ModelMapper modelMapper() {
+		return new ModelMapper();
+	}
 
-    @Bean
-    public DataSource mainDataSource() {
-	BoneCPDataSource ds = new BoneCPDataSource();
-	ds.setDriverClass(jdbcDriverClass);
-	ds.setJdbcUrl(jdbcUrl);
-	ds.setUsername(jdbcUsername);
-	ds.setPassword(jdbcPassword);
+	@Bean
+	public DataSource dataSource() {
+		return new LazyConnectionDataSourceProxy(mainDataSource());
+	}
 
-	ds.setIdleConnectionTestPeriodInMinutes(60);
-	ds.setIdleMaxAgeInMinutes(240);
-	ds.setMaxConnectionsPerPartition(60);
-	ds.setMinConnectionsPerPartition(20);
-	ds.setPartitionCount(3);
-	ds.setAcquireIncrement(10);
-	ds.setStatementsCacheSize(50);
-	ds.setReleaseHelperThreads(3);
+	@Bean
+	public DataSource mainDataSource() {
+		BoneCPDataSource ds = new BoneCPDataSource();
+		ds.setDriverClass(jdbcDriverClass);
+		ds.setJdbcUrl(jdbcUrl);
+		ds.setUsername(jdbcUsername);
+		ds.setPassword(jdbcPassword);
 
-	return ds;
-    }
+		ds.setIdleConnectionTestPeriodInMinutes(60);
+		ds.setIdleMaxAgeInMinutes(240);
+		ds.setMaxConnectionsPerPartition(60);
+		ds.setMinConnectionsPerPartition(20);
+		ds.setPartitionCount(3);
+		ds.setAcquireIncrement(10);
+		ds.setStatementsCacheSize(50);
+		ds.setReleaseHelperThreads(3);
 
-    @Bean
-    public JpaDialect jpaDialect() {
-	return new HibernateJpaDialect();
-    }
+		return ds;
+	}
 
-    @Bean
-    public EntityManagerFactory entityManagerFactory() {
-	HibernateJpaVendorAdapter vendorAdapter = new HibernateJpaVendorAdapter();
-	vendorAdapter.setDatabase(Database.H2);
-	vendorAdapter.setGenerateDdl(jpaGenerateDdl);
-	vendorAdapter.setShowSql(jpaShowSql);
+	@Bean
+	public JpaDialect jpaDialect() {
+		return new HibernateJpaDialect();
+	}
 
-	LocalContainerEntityManagerFactoryBean factory = new LocalContainerEntityManagerFactoryBean();
-	factory.setJpaVendorAdapter(vendorAdapter);
-	factory.setPackagesToScan("org.bricket.b4.*.entity");
-	factory.setDataSource(dataSource());
-	factory.setJpaDialect(jpaDialect());
+	@Bean
+	public EntityManagerFactory entityManagerFactory() {
+		HibernateJpaVendorAdapter vendorAdapter = new HibernateJpaVendorAdapter();
+		vendorAdapter.setDatabase(Database.H2);
+		vendorAdapter.setGenerateDdl(jpaGenerateDdl);
+		vendorAdapter.setShowSql(jpaShowSql);
 
-	Map<String, String> jpaProperties = new HashMap<String, String>();
-	jpaProperties.put("hibernate.dialect", H2Dialect.class.getName());
-	jpaProperties.put("hibernate.cache.region.factory_class",
-		EhCacheRegionFactory.class.getName());
-	jpaProperties.put("hibernate.cache.use_second_level_cache", "true");
-	jpaProperties.put("hibernate.cache.use_query_cache", "true");
-	jpaProperties.put("hibernate.cache.use_minimal_puts", "true");
-	factory.setJpaPropertyMap(jpaProperties);
+		LocalContainerEntityManagerFactoryBean factory = new LocalContainerEntityManagerFactoryBean();
+		factory.setJpaVendorAdapter(vendorAdapter);
+		factory.setPackagesToScan("org.bricket.b4.*.entity");
+		factory.setDataSource(dataSource());
+		factory.setJpaDialect(jpaDialect());
 
-	factory.afterPropertiesSet();
+		Map<String, String> jpaProperties = new HashMap<String, String>();
+		jpaProperties.put("hibernate.dialect", H2Dialect.class.getName());
+		jpaProperties.put("hibernate.cache.region.factory_class",
+				EhCacheRegionFactory.class.getName());
+		jpaProperties.put("hibernate.cache.use_second_level_cache", "true");
+		jpaProperties.put("hibernate.cache.use_query_cache", "true");
+		jpaProperties.put("hibernate.cache.use_minimal_puts", "true");
+		factory.setJpaPropertyMap(jpaProperties);
 
-	return factory.getObject();
-    }
+		factory.afterPropertiesSet();
 
-    @Bean
-    public SharedEntityManagerBean entityManager() {
-	SharedEntityManagerBean em = new SharedEntityManagerBean();
-	em.setEntityManagerFactory(entityManagerFactory());
-	return em;
-    }
+		return factory.getObject();
+	}
 
-    @Bean
-    public PlatformTransactionManager transactionManager() {
-	JpaTransactionManager txManager = new JpaTransactionManager();
-	txManager.setEntityManagerFactory(entityManagerFactory());
-	return txManager;
-    }
+	@Bean
+	public SharedEntityManagerBean entityManager() {
+		SharedEntityManagerBean em = new SharedEntityManagerBean();
+		em.setEntityManagerFactory(entityManagerFactory());
+		return em;
+	}
+
+	@Bean
+	public PlatformTransactionManager transactionManager() {
+		JpaTransactionManager txManager = new JpaTransactionManager();
+		txManager.setEntityManagerFactory(entityManagerFactory());
+		return txManager;
+	}
 }

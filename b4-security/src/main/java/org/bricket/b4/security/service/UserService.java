@@ -19,28 +19,28 @@ package org.bricket.b4.security.service;
 import org.bricket.b4.core.service.B4Service;
 
 public interface UserService extends B4Service {
-    /**
-     * Enumeration of all default users
-     * 
-     * @author Henning Teek
-     */
-    public enum Users {
-	USER("user@localhost", "user"), ADMIN("admin@localhost", "admin");
+	/**
+	 * Enumeration of all default users
+	 * 
+	 * @author Henning Teek
+	 */
+	public enum Users {
+		USER("user@localhost", "user"), ADMIN("admin@localhost", "admin");
 
-	private final String email;
-	private final String password;
+		private final String email;
+		private final String password;
 
-	Users(String email, String password) {
-	    this.email = email;
-	    this.password = password;
+		Users(String email, String password) {
+			this.email = email;
+			this.password = password;
+		}
+
+		public String getEmail() {
+			return email;
+		}
+
+		public String getPassword() {
+			return password;
+		}
 	}
-
-	public String getEmail() {
-	    return email;
-	}
-
-	public String getPassword() {
-	    return password;
-	}
-    }
 }

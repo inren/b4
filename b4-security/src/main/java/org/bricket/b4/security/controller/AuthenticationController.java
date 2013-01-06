@@ -27,12 +27,12 @@ import org.springframework.web.bind.annotation.ResponseBody;
 @Controller
 @RequestMapping("/authenticate")
 public class AuthenticationController {
-    @Autowired
-    private UserRepository userRepository;
+	@Autowired
+	private UserRepository userRepository;
 
-    @RequestMapping(method = RequestMethod.GET)
-    @ResponseBody
-    public Iterable<User> getUsers() {
-	return userRepository.findAll();
-    }
+	@RequestMapping(method = RequestMethod.GET)
+	@ResponseBody
+	public Iterable<User> getUsers() {
+		return userRepository.findAll();
+	}
 }
