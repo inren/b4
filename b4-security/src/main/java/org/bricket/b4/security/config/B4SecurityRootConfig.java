@@ -16,10 +16,23 @@
  */
 package org.bricket.b4.security.config;
 
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.ImportResource;
+import org.springframework.context.annotation.PropertySource;
+import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.security.crypto.password.StandardPasswordEncoder;
 
 @Configuration
+@PropertySource("classpath:META-INF/spring/b4-security.properties")
 @ImportResource(value = { "classpath:/META-INF/spring/security-context.xml" })
 public class B4SecurityRootConfig {
+	@Value("${password.secret}")
+	private CharSequence secret;
+
+	@Bean
+	public PasswordEncoder passwordEncoder() {
+		return new StandardPasswordEncoder(secret);
+	}
 }

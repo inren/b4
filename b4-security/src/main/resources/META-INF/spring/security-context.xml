@@ -6,16 +6,14 @@
            http://www.springframework.org/schema/security/spring-security-3.1.xsd">
 
 	<!-- HTTP basic authentication in Spring Security -->
-	<http>
-		<intercept-url pattern="/authenticate" access="ROLE_USER" />
+	<http pattern="/api/**" create-session="stateless">
+		<intercept-url pattern='/**' access='ROLE_USER' />
 		<http-basic />
 	</http>
 
 	<authentication-manager>
-		<authentication-provider>
-			<user-service>
-				<user name="user" password="user" authorities="ROLE_USER" />
-			</user-service>
+		<authentication-provider user-service-ref="userServiceImpl">
+			<password-encoder ref="passwordEncoder" />
 		</authentication-provider>
 	</authentication-manager>
 </beans:beans>

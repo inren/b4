@@ -10,7 +10,7 @@
         <dependent-module archiveName="b4-core-0.0.1-SNAPSHOT.jar" deploy-path="/WEB-INF/lib" handle="module:/resource/b4-core/b4-core">
             <dependency-type>uses</dependency-type>
         </dependent-module>
-        <property name="context-root" value="b4-server"/>
         <property name="java-output-path" value="/b4-server/target/classes"/>
+        <property name="context-root" value="b4"/>
     </wb-module>
 </project-modules>

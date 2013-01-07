@@ -27,15 +27,24 @@ import org.bricket.b4.core.service.B4ServiceException;
 import org.bricket.b4.core.service.B4ServiceImpl;
 import org.bricket.b4.security.entity.User;
 import org.bricket.b4.security.repository.UserRepository;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.core.userdetails.UserDetailsService;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 @Service
 @Transactional(readOnly = true)
 @Slf4j
-public class UserServiceImpl extends B4ServiceImpl implements UserService {
+public class UserServiceImpl extends B4ServiceImpl implements UserService,
+		UserDetailsService {
 	@Resource
 	UserRepository userRepository;
+
+	@Autowired
+	PasswordEncoder passwordEncoder;
 
 	@Override
 	@Transactional
@@ -45,12 +54,22 @@ public class UserServiceImpl extends B4ServiceImpl implements UserService {
 			for (Users u : Users.values()) {
 				User user = new User();
 				user.setEmail(u.getEmail());
-				user.setPassword(u.getPassword());
+				user.setPassword(passwordEncoder.encode(u.getPassword()));
 				users.add(user);
 			}
 			Iterable<User> result = userRepository.save(users);
 			log.info("created auto generated users: " + result);
 		}
 		log.info("user service initialized");
+	}
+
+	@Override
+	public UserDetails loadUserByUsername(String email)
+			throws UsernameNotFoundException {
+		User user = userRepository.findByEmail(email);
+		if (user == null) {
+			throw new UsernameNotFoundException("no user for email: " + email);
+		}
+		return new UserDetailsImpl(user);
 	}
 }

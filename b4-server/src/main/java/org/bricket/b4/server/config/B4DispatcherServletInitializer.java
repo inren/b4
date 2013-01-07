@@ -16,7 +16,7 @@
  */
 package org.bricket.b4.server.config;
 
-import org.bricket.b4.core.config.B4RootWebConfig;
+import org.bricket.b4.core.config.B4CoreWebConfig;
 import org.springframework.web.servlet.support.AbstractAnnotationConfigDispatcherServletInitializer;
 
 public class B4DispatcherServletInitializer extends
@@ -29,7 +29,7 @@ public class B4DispatcherServletInitializer extends
 
     @Override
     protected Class<?>[] getServletConfigClasses() {
-	return new Class[] { B4RootWebConfig.class };
+	return new Class[] { B4CoreWebConfig.class };
     }
 
     @Override

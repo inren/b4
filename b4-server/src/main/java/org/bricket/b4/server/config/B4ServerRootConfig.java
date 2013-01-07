@@ -16,12 +16,13 @@
  */
 package org.bricket.b4.server.config;
 
-import org.bricket.b4.core.config.B4CoreRootConfig;
-import org.bricket.b4.security.config.B4SecurityRootConfig;
+import org.bricket.b4.core.config.B4CoreWebConfig;
+import org.springframework.context.annotation.ComponentScan;
+import org.springframework.context.annotation.ComponentScan.Filter;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.context.annotation.Import;
+import org.springframework.context.annotation.FilterType;
 
 @Configuration
-@Import(value = { B4CoreRootConfig.class, B4SecurityRootConfig.class })
+@ComponentScan(basePackages = "org.bricket.b4.*.config", excludeFilters = { @Filter(type = FilterType.ASSIGNABLE_TYPE, value = B4CoreWebConfig.class) })
 public class B4ServerRootConfig {
 }

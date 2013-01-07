@@ -16,19 +16,25 @@
  */
 package org.bricket.b4.core.config;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.context.support.PropertySourcesPlaceholderConfigurer;
-import org.springframework.core.io.ClassPathResource;
+import org.springframework.data.repository.support.DomainClassConverter;
+import org.springframework.format.support.FormattingConversionService;
+import org.springframework.web.servlet.config.annotation.EnableWebMvc;
+import org.springframework.web.servlet.config.annotation.WebMvcConfigurerAdapter;
 
 @Configuration
-public class PropertyPlaceholderConfig {
+@EnableWebMvc
+@ComponentScan(basePackages = { "org.bricket.b4.*.controller" })
+public class B4CoreWebConfig extends WebMvcConfigurerAdapter {
+	@Autowired
+	FormattingConversionService conversionService;
+
 	@Bean
-	public static PropertySourcesPlaceholderConfigurer propertySourcesPlaceholderConfigurer() {
-		PropertySourcesPlaceholderConfigurer pspc = new PropertySourcesPlaceholderConfigurer();
-		pspc.setLocation(new ClassPathResource(
-				"/META-INF/spring/b4-core.properties"));
-		pspc.setIgnoreUnresolvablePlaceholders(true);
-		return pspc;
+	public DomainClassConverter<?> domainClassConverter() {
+		return new DomainClassConverter<FormattingConversionService>(
+				conversionService);
 	}
 }

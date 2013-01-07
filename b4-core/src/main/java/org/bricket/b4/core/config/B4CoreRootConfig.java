@@ -32,7 +32,8 @@ import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.EnableLoadTimeWeaving;
 import org.springframework.context.annotation.EnableLoadTimeWeaving.AspectJWeaving;
-import org.springframework.context.annotation.Import;
+import org.springframework.context.annotation.PropertySource;
+import org.springframework.context.support.PropertySourcesPlaceholderConfigurer;
 import org.springframework.dao.annotation.PersistenceExceptionTranslationPostProcessor;
 import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 import org.springframework.jdbc.datasource.LazyConnectionDataSourceProxy;
@@ -50,11 +51,11 @@ import org.springframework.transaction.annotation.EnableTransactionManagement;
 import com.jolbox.bonecp.BoneCPDataSource;
 
 @Configuration
-@Import(PropertyPlaceholderConfig.class)
 @EnableLoadTimeWeaving(aspectjWeaving = AspectJWeaving.ENABLED)
 @EnableTransactionManagement(mode = AdviceMode.ASPECTJ)
 @EnableJpaRepositories("org.bricket.b4.*.repository")
 @ComponentScan(basePackages = { "org.bricket.b4.*.service" })
+@PropertySource("classpath:META-INF/spring/b4-core.properties")
 public class B4CoreRootConfig {
 	@Value("${jdbc.driverClass}")
 	private String jdbcDriverClass;
@@ -80,6 +81,11 @@ public class B4CoreRootConfig {
 	@Bean
 	public static PersistenceAnnotationBeanPostProcessor persistenceAnnotationBeanPostProcessor() {
 		return new PersistenceAnnotationBeanPostProcessor();
+	}
+
+	@Bean
+	public static PropertySourcesPlaceholderConfigurer propertySourcesPlaceholderConfigurer() {
+		return new PropertySourcesPlaceholderConfigurer();
 	}
 
 	@Bean
