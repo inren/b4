@@ -14,7 +14,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.bricket.b4.security.service;
+package org.bricket.b4.security.service.impl;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -27,6 +27,7 @@ import org.bricket.b4.core.service.B4ServiceException;
 import org.bricket.b4.core.service.B4ServiceImpl;
 import org.bricket.b4.security.entity.User;
 import org.bricket.b4.security.repository.UserRepository;
+import org.bricket.b4.security.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
@@ -35,7 +36,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-@Service
+@Service(value = "userService")
 @Transactional(readOnly = true)
 @Slf4j
 public class UserServiceImpl extends B4ServiceImpl implements UserService,
@@ -70,6 +71,8 @@ public class UserServiceImpl extends B4ServiceImpl implements UserService,
 		if (user == null) {
 			throw new UsernameNotFoundException("no user for email: " + email);
 		}
-		return new UserDetailsImpl(user);
+		UserDetailsImpl userDetails = new UserDetailsImpl(user);
+		log.debug(userDetails.toString());
+		return userDetails;
 	}
 }

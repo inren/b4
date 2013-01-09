@@ -347,6 +347,18 @@
 					<groupId>org.apache.tomcat.maven</groupId>
 					<artifactId>tomcat7-maven-plugin</artifactId>
 					<version>2.0</version>
+					<configuration>
+						<path>/b4</path>
+						<useSeparateTomcatClassLoader>true</useSeparateTomcatClassLoader>
+						<classLoaderClass>org.springframework.instrument.classloading.tomcat.TomcatInstrumentableClassLoader</classLoaderClass>
+					</configuration>
+					<dependencies>
+						<dependency>
+							<groupId>org.springframework</groupId>
+							<artifactId>spring-instrument-tomcat</artifactId>
+							<version>${spring.version}</version>
+						</dependency>
+					</dependencies>
 				</plugin>
 				<plugin>
 					<groupId>org.apache.maven.plugins</groupId>

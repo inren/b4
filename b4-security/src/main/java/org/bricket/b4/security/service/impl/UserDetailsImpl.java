@@ -14,26 +14,38 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.bricket.b4.security.service;
+package org.bricket.b4.security.service.impl;
 
-import java.util.Arrays;
 import java.util.Collection;
+import java.util.HashSet;
+import java.util.Set;
 
+import lombok.ToString;
+
+import org.bricket.b4.security.entity.Group;
+import org.bricket.b4.security.entity.Role;
 import org.bricket.b4.security.entity.User;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
+@ToString
 public class UserDetailsImpl implements UserDetails {
 	private User user;
+	private Set<GrantedAuthority> authorities = new HashSet<GrantedAuthority>();
 
 	public UserDetailsImpl(User user) {
 		this.user = user;
+		for (Group group : user.getGroups()) {
+			for (Role role : group.getRoles()) {
+				authorities.add(new SimpleGrantedAuthority(role.getName()));
+			}
+		}
 	}
 
 	@Override
 	public Collection<? extends GrantedAuthority> getAuthorities() {
-		return Arrays.asList(new SimpleGrantedAuthority("ROLE_USER"));
+		return authorities;
 	}
 
 	@Override

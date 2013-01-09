@@ -12,7 +12,7 @@
 	</http>
 
 	<authentication-manager>
-		<authentication-provider user-service-ref="userServiceImpl">
+		<authentication-provider user-service-ref="userService">
 			<password-encoder ref="passwordEncoder" />
 		</authentication-provider>
 	</authentication-manager>
