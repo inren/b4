@@ -45,8 +45,4 @@ public class Group extends DomainObject {
 	@ManyToMany(fetch = FetchType.EAGER)
 	@JoinTable(name = "b4_Group_Role", joinColumns = { @JoinColumn(name = "groupId", referencedColumnName = "id") }, inverseJoinColumns = { @JoinColumn(name = "roleId", referencedColumnName = "id") })
 	private Set<Role> roles;
-	@ManyToMany(fetch = FetchType.EAGER)
-	@JoinTable(name = "b4_Group_User", joinColumns = { @JoinColumn(name = "groupId", referencedColumnName = "id") }, inverseJoinColumns = { @JoinColumn(name = "userId", referencedColumnName = "id") })
-	private Set<User> users;
-
 }

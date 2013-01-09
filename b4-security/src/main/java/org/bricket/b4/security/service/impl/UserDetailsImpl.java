@@ -36,6 +36,13 @@ public class UserDetailsImpl implements UserDetails {
 
 	public UserDetailsImpl(User user) {
 		this.user = user;
+
+		// direct roles
+		for (Role role : user.getRoles()) {
+			authorities.add(new SimpleGrantedAuthority(role.getName()));
+		}
+
+		// roles by group
 		for (Group group : user.getGroups()) {
 			for (Role role : group.getRoles()) {
 				authorities.add(new SimpleGrantedAuthority(role.getName()));

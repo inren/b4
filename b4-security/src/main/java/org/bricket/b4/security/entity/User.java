@@ -21,6 +21,8 @@ import java.util.Set;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
+import javax.persistence.JoinColumn;
+import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
 import javax.persistence.Table;
 import javax.persistence.UniqueConstraint;
@@ -40,13 +42,17 @@ import org.hibernate.annotations.CacheConcurrencyStrategy;
 @Entity
 @Table(name = "b4_User", uniqueConstraints = @UniqueConstraint(columnNames = "email"))
 @Data
-@ToString(exclude = { "password", "groups" })
+@ToString(exclude = { "password" })
 @EqualsAndHashCode(callSuper = true, exclude = "groups")
 public class User extends DomainObject {
 	@Column(nullable = false)
 	private String email;
 	private String password;
-	@ManyToMany(mappedBy = "users", fetch = FetchType.EAGER)
+	@ManyToMany(fetch = FetchType.EAGER)
+	@JoinTable(name = "b4_User_Role", joinColumns = { @JoinColumn(name = "userId", referencedColumnName = "id") }, inverseJoinColumns = { @JoinColumn(name = "roleId", referencedColumnName = "id") })
+	private Set<Role> roles;
+	@ManyToMany(fetch = FetchType.EAGER)
+	@JoinTable(name = "b4_User_Group", joinColumns = { @JoinColumn(name = "userId", referencedColumnName = "id") }, inverseJoinColumns = { @JoinColumn(name = "groupId", referencedColumnName = "id") })
 	private Set<Group> groups;
 
 }

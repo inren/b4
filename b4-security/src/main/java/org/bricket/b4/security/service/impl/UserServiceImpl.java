@@ -17,6 +17,8 @@
 package org.bricket.b4.security.service.impl;
 
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.HashSet;
 import java.util.List;
 
 import javax.annotation.Resource;
@@ -25,8 +27,12 @@ import lombok.extern.slf4j.Slf4j;
 
 import org.bricket.b4.core.service.B4ServiceException;
 import org.bricket.b4.core.service.B4ServiceImpl;
+import org.bricket.b4.security.entity.Role;
 import org.bricket.b4.security.entity.User;
+import org.bricket.b4.security.repository.RoleRepository;
 import org.bricket.b4.security.repository.UserRepository;
+import org.bricket.b4.security.service.RoleService;
+import org.bricket.b4.security.service.RoleService.Roles;
 import org.bricket.b4.security.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -44,18 +50,41 @@ public class UserServiceImpl extends B4ServiceImpl implements UserService,
 	@Resource
 	UserRepository userRepository;
 
+	@Resource
+	RoleRepository roleRepository;
+
+	@Autowired
+	RoleService roleService;
+
 	@Autowired
 	PasswordEncoder passwordEncoder;
 
 	@Override
 	@Transactional
 	protected void onInit() throws B4ServiceException {
+		roleService.init();
+
 		if (userRepository.count() == 0) {
+			Role adminRole = roleRepository.findByName(Roles.ROLE_ADMIN.name());
+			Role userRole = roleRepository.findByName(Roles.ROLE_USER.name());
+
 			List<User> users = new ArrayList<User>();
 			for (Users u : Users.values()) {
 				User user = new User();
 				user.setEmail(u.getEmail());
 				user.setPassword(passwordEncoder.encode(u.getPassword()));
+
+				switch (u) {
+				case ADMIN:
+					user.setRoles(new HashSet<Role>(Arrays.<Role> asList(
+							adminRole, userRole)));
+					break;
+				case USER:
+					user.setRoles(new HashSet<Role>(Arrays
+							.<Role> asList(userRole)));
+					break;
+				}
+
 				users.add(user);
 			}
 			Iterable<User> result = userRepository.save(users);
