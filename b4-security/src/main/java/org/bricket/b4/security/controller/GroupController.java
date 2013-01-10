@@ -16,13 +16,10 @@
  */
 package org.bricket.b4.security.controller;
 
-import java.util.List;
-
 import org.bricket.b4.core.controller.ResourceNotFoundException;
-import org.bricket.b4.security.entity.User;
-import org.bricket.b4.security.repository.UserRepository;
+import org.bricket.b4.security.entity.Group;
+import org.bricket.b4.security.repository.GroupRepository;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -30,28 +27,23 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 @Controller
-@RequestMapping("/users")
-public class UserController {
+@RequestMapping("/groups")
+public class GroupController {
 	@Autowired
-	private UserRepository userRepository;
-
-	@Autowired
-	private UserResourceAssembler userResourceAssembler;
+	private GroupRepository groupRepository;
 
 	@RequestMapping(method = RequestMethod.GET)
 	@ResponseBody
-	public HttpEntity<List<UserResource>> getUsers() {
-		return new HttpEntity<List<UserResource>>(
-				userResourceAssembler.toResources(userRepository.findAll()));
+	public Iterable<Group> getGroups() {
+		return groupRepository.findAll();
 	}
 
-	@RequestMapping(value = "/{userId}", method = RequestMethod.GET)
+	@RequestMapping(value = "/{groupId}", method = RequestMethod.GET)
 	@ResponseBody
-	public HttpEntity<UserResource> getUser(@PathVariable("userId") User user) {
-		if (user == null) {
+	public Group getGroup(@PathVariable("groupId") Group group) {
+		if (group == null) {
 			throw new ResourceNotFoundException();
 		}
-		return new HttpEntity<UserResource>(
-				userResourceAssembler.toResource(user));
+		return group;
 	}
 }

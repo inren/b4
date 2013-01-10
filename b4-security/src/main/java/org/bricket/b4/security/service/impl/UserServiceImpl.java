@@ -101,7 +101,6 @@ public class UserServiceImpl extends B4ServiceImpl implements UserService,
 			throw new UsernameNotFoundException("no user for email: " + email);
 		}
 		UserDetailsImpl userDetails = new UserDetailsImpl(user);
-		log.debug(userDetails.toString());
 		return userDetails;
 	}
 }

@@ -25,13 +25,15 @@ import javax.persistence.MappedSuperclass;
 
 import lombok.Data;
 
+import org.springframework.hateoas.Identifiable;
+
 /**
  * @author Henning Teek
  */
 
 @MappedSuperclass
 @Data
-public abstract class DomainObject implements Serializable {
+public abstract class DomainObject implements Identifiable<Long>, Serializable {
 	@Id
 	@GeneratedValue(strategy = GenerationType.AUTO)
 	private Long id;
