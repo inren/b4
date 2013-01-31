@@ -28,11 +28,11 @@ import org.springframework.security.crypto.password.StandardPasswordEncoder;
 @PropertySource("classpath:META-INF/spring/b4-security.properties")
 @ImportResource(value = { "classpath:/META-INF/spring/security-context.xml" })
 public class B4SecurityRootConfig {
-	@Value("${password.secret}")
-	private CharSequence secret;
+    @Value("${password.secret}")
+    private CharSequence secret;
 
-	@Bean
-	public PasswordEncoder passwordEncoder() {
-		return new StandardPasswordEncoder(secret);
-	}
+    @Bean
+    public PasswordEncoder passwordEncoder() {
+        return new StandardPasswordEncoder(secret);
+    }
 }

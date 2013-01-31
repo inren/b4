@@ -29,12 +29,11 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurerAdapter
 @EnableWebMvc
 @ComponentScan(basePackages = { "org.bricket.b4.*.controller" })
 public class B4CoreWebConfig extends WebMvcConfigurerAdapter {
-	@Autowired
-	FormattingConversionService conversionService;
+    @Autowired
+    FormattingConversionService conversionService;
 
-	@Bean
-	public DomainClassConverter<?> domainClassConverter() {
-		return new DomainClassConverter<FormattingConversionService>(
-				conversionService);
-	}
+    @Bean
+    public DomainClassConverter<?> domainClassConverter() {
+        return new DomainClassConverter<FormattingConversionService>(conversionService);
+    }
 }

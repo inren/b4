@@ -19,6 +19,5 @@ package org.bricket.b4.security.repository;
 import org.bricket.b4.security.entity.Group;
 import org.springframework.data.repository.PagingAndSortingRepository;
 
-public interface GroupRepository extends
-		PagingAndSortingRepository<Group, Long> {
+public interface GroupRepository extends PagingAndSortingRepository<Group, Long> {
 }

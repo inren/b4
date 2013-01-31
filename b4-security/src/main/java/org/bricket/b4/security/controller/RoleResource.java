@@ -7,6 +7,6 @@ import org.springframework.hateoas.ResourceSupport;
 
 @Data
 @EqualsAndHashCode(callSuper = true)
-public class UserResource extends ResourceSupport {
-    private String email;
+public class RoleResource extends ResourceSupport {
+    private String name;
 }

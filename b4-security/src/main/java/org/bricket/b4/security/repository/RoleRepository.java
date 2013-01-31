@@ -20,6 +20,5 @@ import org.bricket.b4.security.entity.Role;
 import org.springframework.data.repository.PagingAndSortingRepository;
 
 public interface RoleRepository extends PagingAndSortingRepository<Role, Long> {
-
-	Role findByName(String name);
+    Role findByName(String name);
 }

@@ -34,7 +34,7 @@ import org.springframework.hateoas.Identifiable;
 @MappedSuperclass
 @Data
 public abstract class DomainObject implements Identifiable<Long>, Serializable {
-	@Id
-	@GeneratedValue(strategy = GenerationType.AUTO)
-	private Long id;
+    @Id
+    @GeneratedValue(strategy = GenerationType.AUTO)
+    private Long id;
 }

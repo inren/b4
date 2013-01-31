@@ -7,21 +7,20 @@ import org.springframework.hateoas.mvc.ResourceAssemblerSupport;
 import org.springframework.stereotype.Service;
 
 @Service
-public class UserResourceAssembler extends
-		ResourceAssemblerSupport<User, UserResource> {
+public class UserResourceAssembler extends ResourceAssemblerSupport<User, UserResource> {
 
-	@Autowired
-	ModelMapper modelmapper;
+    @Autowired
+    ModelMapper modelmapper;
 
-	public UserResourceAssembler() {
-		super(UserController.class, UserResource.class);
-	}
+    public UserResourceAssembler() {
+        super(UserController.class, UserResource.class);
+    }
 
-	@Override
-	public UserResource toResource(User user) {
-		UserResource resource = createResource(user);
-		modelmapper.map(user, resource);
-		return resource;
-	}
+    @Override
+    public UserResource toResource(User user) {
+        UserResource resource = instantiateResource(user);
+        modelmapper.map(user, resource);
+        return resource;
+    }
 
 }

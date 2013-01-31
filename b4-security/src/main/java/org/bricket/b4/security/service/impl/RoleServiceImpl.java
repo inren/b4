@@ -35,22 +35,22 @@ import org.springframework.transaction.annotation.Transactional;
 @Transactional(readOnly = true)
 @Slf4j
 public class RoleServiceImpl extends B4ServiceImpl implements RoleService {
-	@Resource
-	private RoleRepository roleRepository;
+    @Resource
+    private RoleRepository roleRepository;
 
-	@Transactional
-	@Override
-	protected final void onInit() throws B4ServiceException {
-		if (roleRepository.count() == 0) {
-			List<Role> roles = new ArrayList<Role>();
-			for (Roles role : Roles.values()) {
-				Role r = new Role();
-				r.setName(role.name());
-				roles.add(r);
-			}
-			Iterable<Role> result = roleRepository.save(roles);
-			log.info("created auto generated roles: " + result);
-		}
-		log.info("role service initialized");
-	}
+    @Transactional
+    @Override
+    protected final void onInit() throws B4ServiceException {
+        if (roleRepository.count() == 0) {
+            List<Role> roles = new ArrayList<Role>();
+            for (Roles role : Roles.values()) {
+                Role r = new Role();
+                r.setName(role.name());
+                roles.add(r);
+            }
+            Iterable<Role> result = roleRepository.save(roles);
+            log.info("created auto generated roles: " + result);
+        }
+        log.info("role service initialized");
+    }
 }

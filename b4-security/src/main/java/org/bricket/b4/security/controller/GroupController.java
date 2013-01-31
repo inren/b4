@@ -16,12 +16,16 @@
  */
 package org.bricket.b4.security.controller;
 
+import java.util.List;
+
 import org.bricket.b4.core.controller.ResourceNotFoundException;
 import org.bricket.b4.security.entity.Group;
 import org.bricket.b4.security.repository.GroupRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
@@ -29,21 +33,40 @@ import org.springframework.web.bind.annotation.ResponseBody;
 @Controller
 @RequestMapping("/groups")
 public class GroupController {
-	@Autowired
-	private GroupRepository groupRepository;
+    @Autowired
+    private GroupRepository groupRepository;
 
-	@RequestMapping(method = RequestMethod.GET)
-	@ResponseBody
-	public Iterable<Group> getGroups() {
-		return groupRepository.findAll();
-	}
+    @Autowired
+    private GroupResourceAssembler groupResourceAssembler;
 
-	@RequestMapping(value = "/{groupId}", method = RequestMethod.GET)
-	@ResponseBody
-	public Group getGroup(@PathVariable("groupId") Group group) {
-		if (group == null) {
-			throw new ResourceNotFoundException();
-		}
-		return group;
-	}
+    @Autowired
+    private RoleResourceAssembler roleResourceAssembler;
+
+    @RequestMapping(method = RequestMethod.GET)
+    @ResponseBody
+    public HttpEntity<List<GroupResource>> getGroups() {
+        return new HttpEntity<List<GroupResource>>(groupResourceAssembler.toResources(groupRepository.findAll()));
+    }
+
+    @RequestMapping(method = RequestMethod.POST)
+    @ResponseBody
+    public HttpEntity<GroupResource> createGroup(@RequestBody Group group) {
+        group.setId(null);
+        return new HttpEntity<GroupResource>(groupResourceAssembler.toResource(groupRepository.save(group)));
+    }
+
+    @RequestMapping(value = "/{groupId}", method = RequestMethod.GET)
+    @ResponseBody
+    public HttpEntity<GroupResource> getGroup(@PathVariable("groupId") Group group) {
+        if (group == null) {
+            throw new ResourceNotFoundException();
+        }
+        return new HttpEntity<GroupResource>(groupResourceAssembler.toResource(group));
+    }
+
+    @RequestMapping(value = "/{groupId}/roles", method = RequestMethod.GET)
+    @ResponseBody
+    public HttpEntity<List<RoleResource>> getRoles(@PathVariable("groupId") Group group) {
+        return new HttpEntity<List<RoleResource>>(roleResourceAssembler.toResources(group.getRoles()));
+    }
 }

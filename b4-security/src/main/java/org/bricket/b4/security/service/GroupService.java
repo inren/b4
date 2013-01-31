@@ -23,22 +23,22 @@ import org.bricket.b4.core.service.B4Service;
  * @author Henning Teek
  */
 public interface GroupService extends B4Service {
-	/**
-	 * Enumeration of all default groups
-	 * 
-	 * @author Henning Teek
-	 */
-	public enum Groups {
-		GROUP_ADMIN("admins"), GROUP_USER("users");
+    /**
+     * Enumeration of all default groups
+     * 
+     * @author Henning Teek
+     */
+    public enum Groups {
+        GROUP_ADMIN("admins"), GROUP_USER("users");
 
-		private final String name;
+        private final String name;
 
-		Groups(String name) {
-			this.name = name;
-		}
+        Groups(String name) {
+            this.name = name;
+        }
 
-		public String getName() {
-			return name;
-		}
-	}
+        public String getName() {
+            return name;
+        }
+    }
 }
