@@ -37,6 +37,6 @@ import org.hibernate.annotations.CacheConcurrencyStrategy;
 @Data
 @EqualsAndHashCode(callSuper = true)
 public class Role extends DomainObject {
-	@Column(nullable = false)
-	private String name;
+    @Column(nullable = false)
+    private String name;
 }

@@ -17,24 +17,24 @@
 package org.bricket.b4.core.service;
 
 public class B4ServiceException extends Exception {
-	private static final String SERVICE_ERROR = "service.error.";
+    private static final String SERVICE_ERROR = "service.error.";
 
-	private String key;
+    private String key;
 
-	/**
-	 * @param key
-	 */
-	public B4ServiceException(String key) {
-		super();
-		this.key = key;
-	}
+    /**
+     * @param key
+     */
+    public B4ServiceException(String key) {
+        super();
+        this.key = key;
+    }
 
-	public B4ServiceException(String key, Throwable cause) {
-		super(cause);
-		this.key = key;
-	}
+    public B4ServiceException(String key, Throwable cause) {
+        super(cause);
+        this.key = key;
+    }
 
-	public String getKey() {
-		return SERVICE_ERROR + key;
-	}
+    public String getKey() {
+        return SERVICE_ERROR + key;
+    }
 }

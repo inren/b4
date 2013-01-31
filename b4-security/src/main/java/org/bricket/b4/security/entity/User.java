@@ -45,14 +45,17 @@ import org.hibernate.annotations.CacheConcurrencyStrategy;
 @ToString(exclude = { "password" })
 @EqualsAndHashCode(callSuper = true, exclude = "groups")
 public class User extends DomainObject {
-	@Column(nullable = false)
-	private String email;
-	private String password;
-	@ManyToMany(fetch = FetchType.EAGER)
-	@JoinTable(name = "b4_User_Role", joinColumns = { @JoinColumn(name = "userId", referencedColumnName = "id") }, inverseJoinColumns = { @JoinColumn(name = "roleId", referencedColumnName = "id") })
-	private Set<Role> roles;
-	@ManyToMany(fetch = FetchType.EAGER)
-	@JoinTable(name = "b4_User_Group", joinColumns = { @JoinColumn(name = "userId", referencedColumnName = "id") }, inverseJoinColumns = { @JoinColumn(name = "groupId", referencedColumnName = "id") })
-	private Set<Group> groups;
+    @Column(nullable = false)
+    private String email;
+
+    private String password;
+
+    @ManyToMany(fetch = FetchType.EAGER)
+    @JoinTable(name = "b4_User_Role", joinColumns = { @JoinColumn(name = "userId", referencedColumnName = "id") }, inverseJoinColumns = { @JoinColumn(name = "roleId", referencedColumnName = "id") })
+    private Set<Role> roles;
+
+    @ManyToMany(fetch = FetchType.EAGER)
+    @JoinTable(name = "b4_User_Group", joinColumns = { @JoinColumn(name = "userId", referencedColumnName = "id") }, inverseJoinColumns = { @JoinColumn(name = "groupId", referencedColumnName = "id") })
+    private Set<Group> groups;
 
 }

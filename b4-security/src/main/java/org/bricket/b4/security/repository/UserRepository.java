@@ -20,6 +20,5 @@ import org.bricket.b4.security.entity.User;
 import org.springframework.data.repository.PagingAndSortingRepository;
 
 public interface UserRepository extends PagingAndSortingRepository<User, Long> {
-
-	public User findByEmail(String email);
+    public User findByEmail(String email);
 }

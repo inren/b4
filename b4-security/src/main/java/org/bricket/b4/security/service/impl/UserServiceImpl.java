@@ -45,62 +45,58 @@ import org.springframework.transaction.annotation.Transactional;
 @Service(value = "userService")
 @Transactional(readOnly = true)
 @Slf4j
-public class UserServiceImpl extends B4ServiceImpl implements UserService,
-		UserDetailsService {
-	@Resource
-	UserRepository userRepository;
+public class UserServiceImpl extends B4ServiceImpl implements UserService, UserDetailsService {
+    @Resource
+    UserRepository userRepository;
 
-	@Resource
-	RoleRepository roleRepository;
+    @Resource
+    RoleRepository roleRepository;
 
-	@Autowired
-	RoleService roleService;
+    @Autowired
+    RoleService roleService;
 
-	@Autowired
-	PasswordEncoder passwordEncoder;
+    @Autowired
+    PasswordEncoder passwordEncoder;
 
-	@Override
-	@Transactional
-	protected void onInit() throws B4ServiceException {
-		roleService.init();
+    @Override
+    @Transactional
+    protected void onInit() throws B4ServiceException {
+        roleService.init();
 
-		if (userRepository.count() == 0) {
-			Role adminRole = roleRepository.findByName(Roles.ROLE_ADMIN.name());
-			Role userRole = roleRepository.findByName(Roles.ROLE_USER.name());
+        if (userRepository.count() == 0) {
+            Role adminRole = roleRepository.findByName(Roles.ROLE_ADMIN.name());
+            Role userRole = roleRepository.findByName(Roles.ROLE_USER.name());
 
-			List<User> users = new ArrayList<User>();
-			for (Users u : Users.values()) {
-				User user = new User();
-				user.setEmail(u.getEmail());
-				user.setPassword(passwordEncoder.encode(u.getPassword()));
+            List<User> users = new ArrayList<User>();
+            for (Users u : Users.values()) {
+                User user = new User();
+                user.setEmail(u.getEmail());
+                user.setPassword(passwordEncoder.encode(u.getPassword()));
 
-				switch (u) {
-				case ADMIN:
-					user.setRoles(new HashSet<Role>(Arrays.<Role> asList(
-							adminRole, userRole)));
-					break;
-				case USER:
-					user.setRoles(new HashSet<Role>(Arrays
-							.<Role> asList(userRole)));
-					break;
-				}
+                switch (u) {
+                case ADMIN:
+                    user.setRoles(new HashSet<Role>(Arrays.<Role> asList(adminRole, userRole)));
+                    break;
+                case USER:
+                    user.setRoles(new HashSet<Role>(Arrays.<Role> asList(userRole)));
+                    break;
+                }
 
-				users.add(user);
-			}
-			Iterable<User> result = userRepository.save(users);
-			log.info("created auto generated users: " + result);
-		}
-		log.info("user service initialized");
-	}
+                users.add(user);
+            }
+            Iterable<User> result = userRepository.save(users);
+            log.info("created auto generated users: " + result);
+        }
+        log.info("user service initialized");
+    }
 
-	@Override
-	public UserDetails loadUserByUsername(String email)
-			throws UsernameNotFoundException {
-		User user = userRepository.findByEmail(email);
-		if (user == null) {
-			throw new UsernameNotFoundException("no user for email: " + email);
-		}
-		UserDetailsImpl userDetails = new UserDetailsImpl(user);
-		return userDetails;
-	}
+    @Override
+    public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
+        User user = userRepository.findByEmail(email);
+        if (user == null) {
+            throw new UsernameNotFoundException("no user for email: " + email);
+        }
+        UserDetailsImpl userDetails = new UserDetailsImpl(user);
+        return userDetails;
+    }
 }

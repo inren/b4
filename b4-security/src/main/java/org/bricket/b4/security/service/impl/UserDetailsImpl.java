@@ -31,57 +31,57 @@ import org.springframework.security.core.userdetails.UserDetails;
 
 @ToString
 public class UserDetailsImpl implements UserDetails {
-	private User user;
-	private Set<GrantedAuthority> authorities = new HashSet<GrantedAuthority>();
+    private User user;
+    private Set<GrantedAuthority> authorities = new HashSet<GrantedAuthority>();
 
-	public UserDetailsImpl(User user) {
-		this.user = user;
+    public UserDetailsImpl(User user) {
+        this.user = user;
 
-		// direct roles
-		for (Role role : user.getRoles()) {
-			authorities.add(new SimpleGrantedAuthority(role.getName()));
-		}
+        // direct roles
+        for (Role role : user.getRoles()) {
+            authorities.add(new SimpleGrantedAuthority(role.getName()));
+        }
 
-		// roles by group
-		for (Group group : user.getGroups()) {
-			for (Role role : group.getRoles()) {
-				authorities.add(new SimpleGrantedAuthority(role.getName()));
-			}
-		}
-	}
+        // roles by group
+        for (Group group : user.getGroups()) {
+            for (Role role : group.getRoles()) {
+                authorities.add(new SimpleGrantedAuthority(role.getName()));
+            }
+        }
+    }
 
-	@Override
-	public Collection<? extends GrantedAuthority> getAuthorities() {
-		return authorities;
-	}
+    @Override
+    public Collection<? extends GrantedAuthority> getAuthorities() {
+        return authorities;
+    }
 
-	@Override
-	public String getPassword() {
-		return user.getPassword();
-	}
+    @Override
+    public String getPassword() {
+        return user.getPassword();
+    }
 
-	@Override
-	public String getUsername() {
-		return user.getEmail();
-	}
+    @Override
+    public String getUsername() {
+        return user.getEmail();
+    }
 
-	@Override
-	public boolean isAccountNonExpired() {
-		return true;
-	}
+    @Override
+    public boolean isAccountNonExpired() {
+        return true;
+    }
 
-	@Override
-	public boolean isAccountNonLocked() {
-		return true;
-	}
+    @Override
+    public boolean isAccountNonLocked() {
+        return true;
+    }
 
-	@Override
-	public boolean isCredentialsNonExpired() {
-		return true;
-	}
+    @Override
+    public boolean isCredentialsNonExpired() {
+        return true;
+    }
 
-	@Override
-	public boolean isEnabled() {
-		return true;
-	}
+    @Override
+    public boolean isEnabled() {
+        return true;
+    }
 }

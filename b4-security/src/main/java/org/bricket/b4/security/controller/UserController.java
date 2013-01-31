@@ -23,8 +23,10 @@ import org.bricket.b4.security.entity.User;
 import org.bricket.b4.security.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpEntity;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
@@ -32,26 +34,64 @@ import org.springframework.web.bind.annotation.ResponseBody;
 @Controller
 @RequestMapping("/users")
 public class UserController {
-	@Autowired
-	private UserRepository userRepository;
+    @Autowired
+    private UserRepository userRepository;
 
-	@Autowired
-	private UserResourceAssembler userResourceAssembler;
+    @Autowired
+    private UserResourceAssembler userResourceAssembler;
 
-	@RequestMapping(method = RequestMethod.GET)
-	@ResponseBody
-	public HttpEntity<List<UserResource>> getUsers() {
-		return new HttpEntity<List<UserResource>>(
-				userResourceAssembler.toResources(userRepository.findAll()));
-	}
+    @Autowired
+    private GroupResourceAssembler groupResourceAssembler;
 
-	@RequestMapping(value = "/{userId}", method = RequestMethod.GET)
-	@ResponseBody
-	public HttpEntity<UserResource> getUser(@PathVariable("userId") User user) {
-		if (user == null) {
-			throw new ResourceNotFoundException();
-		}
-		return new HttpEntity<UserResource>(
-				userResourceAssembler.toResource(user));
-	}
+    @Autowired
+    private RoleResourceAssembler roleResourceAssembler;
+
+    @Autowired
+    private PasswordEncoder passwordEncoder;
+
+    @RequestMapping(method = RequestMethod.GET)
+    @ResponseBody
+    public HttpEntity<List<UserResource>> getUsers() {
+        return new HttpEntity<List<UserResource>>(userResourceAssembler.toResources(userRepository.findAll()));
+    }
+
+    @RequestMapping(method = RequestMethod.POST)
+    @ResponseBody
+    public HttpEntity<UserResource> createUser(@RequestBody User user) {
+        user.setId(null);
+        user.setPassword(passwordEncoder.encode(user.getPassword()));
+        return new HttpEntity<UserResource>(userResourceAssembler.toResource(userRepository.save(user)));
+    }
+
+    @RequestMapping(value = "/{userId}", method = RequestMethod.GET)
+    @ResponseBody
+    public HttpEntity<UserResource> getUser(@PathVariable("userId") User user) {
+        if (user == null) {
+            throw new ResourceNotFoundException();
+        }
+        return new HttpEntity<UserResource>(userResourceAssembler.toResource(user));
+    }
+
+    @RequestMapping(value = "/{userId}/roles", method = RequestMethod.GET)
+    @ResponseBody
+    public HttpEntity<List<RoleResource>> getRoles(@PathVariable("userId") User user) {
+        return new HttpEntity<List<RoleResource>>(roleResourceAssembler.toResources(user.getRoles()));
+    }
+
+    @RequestMapping(value = "/{userId}/groups", method = RequestMethod.GET)
+    @ResponseBody
+    public HttpEntity<List<GroupResource>> getGroups(@PathVariable("userId") User user) {
+        return new HttpEntity<List<GroupResource>>(groupResourceAssembler.toResources(user.getGroups()));
+    }
+
+    @RequestMapping(value = "/{userId}", method = RequestMethod.PUT)
+    @ResponseBody
+    public HttpEntity<UserResource> updateUser(@PathVariable("userId") User user, @RequestBody User u) {
+        if (user == null) {
+            throw new ResourceNotFoundException();
+        }
+
+        user.setEmail(u.getEmail());
+        return new HttpEntity<UserResource>(userResourceAssembler.toResource(userRepository.save(user)));
+    }
 }

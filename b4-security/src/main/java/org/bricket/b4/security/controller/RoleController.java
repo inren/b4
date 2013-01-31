@@ -16,12 +16,16 @@
  */
 package org.bricket.b4.security.controller;
 
+import java.util.List;
+
 import org.bricket.b4.core.controller.ResourceNotFoundException;
 import org.bricket.b4.security.entity.Role;
 import org.bricket.b4.security.repository.RoleRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
@@ -29,21 +33,31 @@ import org.springframework.web.bind.annotation.ResponseBody;
 @Controller
 @RequestMapping("/roles")
 public class RoleController {
-	@Autowired
-	private RoleRepository roleRepository;
+    @Autowired
+    private RoleRepository roleRepository;
 
-	@RequestMapping(method = RequestMethod.GET)
-	@ResponseBody
-	public Iterable<Role> getRoles() {
-		return roleRepository.findAll();
-	}
+    @Autowired
+    private RoleResourceAssembler roleResourceAssembler;
 
-	@RequestMapping(value = "/{roleId}", method = RequestMethod.GET)
-	@ResponseBody
-	public Role getRole(@PathVariable("roleId") Role role) {
-		if (role == null) {
-			throw new ResourceNotFoundException();
-		}
-		return role;
-	}
+    @RequestMapping(method = RequestMethod.GET)
+    @ResponseBody
+    public HttpEntity<List<RoleResource>> getRoles() {
+        return new HttpEntity<List<RoleResource>>(roleResourceAssembler.toResources(roleRepository.findAll()));
+    }
+
+    @RequestMapping(method = RequestMethod.POST)
+    @ResponseBody
+    public HttpEntity<RoleResource> createRole(@RequestBody Role role) {
+        role.setId(null);
+        return new HttpEntity<RoleResource>(roleResourceAssembler.toResource(roleRepository.save(role)));
+    }
+
+    @RequestMapping(value = "/{roleId}", method = RequestMethod.GET)
+    @ResponseBody
+    public HttpEntity<RoleResource> getRole(@PathVariable("roleId") Role role) {
+        if (role == null) {
+            throw new ResourceNotFoundException();
+        }
+        return new HttpEntity<RoleResource>(roleResourceAssembler.toResource(role));
+    }
 }

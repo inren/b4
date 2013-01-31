@@ -32,12 +32,12 @@ import org.springframework.transaction.annotation.Transactional;
 @Slf4j
 public class GroupServiceImpl extends B4ServiceImpl implements GroupService {
 
-	@Resource
-	private GroupRepository groupRepository;
+    @Resource
+    private GroupRepository groupRepository;
 
-	@Transactional
-	@Override
-	protected final void onInit() throws B4ServiceException {
-		log.info("group service initialized");
-	}
+    @Transactional
+    @Override
+    protected final void onInit() throws B4ServiceException {
+        log.info("group service initialized");
+    }
 }

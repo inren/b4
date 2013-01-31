@@ -40,9 +40,10 @@ import org.hibernate.annotations.CacheConcurrencyStrategy;
 @Data
 @EqualsAndHashCode(callSuper = true)
 public class Group extends DomainObject {
-	@Column(nullable = false)
-	private String name;
-	@ManyToMany(fetch = FetchType.EAGER)
-	@JoinTable(name = "b4_Group_Role", joinColumns = { @JoinColumn(name = "groupId", referencedColumnName = "id") }, inverseJoinColumns = { @JoinColumn(name = "roleId", referencedColumnName = "id") })
-	private Set<Role> roles;
+    @Column(nullable = false)
+    private String name;
+
+    @ManyToMany(fetch = FetchType.EAGER)
+    @JoinTable(name = "b4_Group_Role", joinColumns = { @JoinColumn(name = "groupId", referencedColumnName = "id") }, inverseJoinColumns = { @JoinColumn(name = "roleId", referencedColumnName = "id") })
+    private Set<Role> roles;
 }

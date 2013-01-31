@@ -17,5 +17,5 @@
 package org.bricket.b4.core.service;
 
 public interface B4Service {
-	void init() throws B4ServiceException;
+    void init() throws B4ServiceException;
 }

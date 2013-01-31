@@ -31,20 +31,19 @@ import org.springframework.web.bind.annotation.ResponseBody;
 @Controller
 @RequestMapping("/authenticate")
 public class AuthenticationController {
-	@Autowired
-	private UserRepository userRepository;
+    @Autowired
+    private UserRepository userRepository;
 
-	@Autowired
-	private UserResourceAssembler userResourceAssembler;
+    @Autowired
+    private UserResourceAssembler userResourceAssembler;
 
-	@RequestMapping(method = RequestMethod.GET)
-	@ResponseBody
-	public HttpEntity<UserResource> authenticate(Principal principal) {
-		User user = userRepository.findByEmail(principal.getName());
-		if (user == null) {
-			throw new ResourceNotFoundException();
-		}
-		return new HttpEntity<UserResource>(
-				userResourceAssembler.toResource(user));
-	}
+    @RequestMapping(method = RequestMethod.GET)
+    @ResponseBody
+    public HttpEntity<UserResource> authenticate(Principal principal) {
+        User user = userRepository.findByEmail(principal.getName());
+        if (user == null) {
+            throw new ResourceNotFoundException();
+        }
+        return new HttpEntity<UserResource>(userResourceAssembler.toResource(user));
+    }
 }

@@ -23,12 +23,12 @@ import org.bricket.b4.core.service.B4Service;
  * @author Henning Teek
  */
 public interface RoleService extends B4Service {
-	/**
-	 * Enumeration of all default roles
-	 * 
-	 * @author Henning Teek
-	 */
-	public enum Roles {
-		ROLE_ADMIN, ROLE_USER;
-	}
+    /**
+     * Enumeration of all default roles
+     * 
+     * @author Henning Teek
+     */
+    public enum Roles {
+        ROLE_ADMIN, ROLE_USER;
+    }
 }
